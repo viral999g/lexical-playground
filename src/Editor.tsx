@@ -73,6 +73,9 @@ import YouTubePlugin from "./plugins/YouTubePlugin";
 import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
 import ContentEditable from "./ui/ContentEditable";
 import Placeholder from "./ui/Placeholder";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { $getRoot, $getSelection } from "lexical";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 const skipCollaborationInit =
   // @ts-ignore
@@ -139,6 +142,22 @@ export default function Editor(): JSX.Element {
       window.removeEventListener("resize", updateViewPortWidth);
     };
   }, [isSmallWidthViewport]);
+
+  function onChange(editorState) {
+    editorState.read(() => {
+      const root = $getRoot();
+      const selection = $getSelection();
+
+      console.log(root?.exportJSON(), selection);
+    });
+  }
+
+  const [editor] = useLexicalComposerContext();
+  useEffect(() => {
+    return editor.registerUpdateListener((listener) => {
+      console.log(listener.editorState.toJSON());
+    });
+  }, [editor]);
 
   return (
     <>

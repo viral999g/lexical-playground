@@ -28,6 +28,9 @@ import TypingPerfPlugin from "./plugins/TypingPerfPlugin";
 import Settings from "./Settings";
 import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
 
+import initialState from "./utils/initialStates/initialState.json";
+import initialState2 from "./utils/initialStates/initialState2.json";
+
 console.warn(
   "If you are profiling the playground app, please ensure you turn off the debug view. You can disable it by pressing on the settings control in the bottom-left of your screen and toggling the debug view setting."
 );
@@ -118,11 +121,7 @@ function App(): JSX.Element {
   } = useSettings();
 
   const initialConfig = {
-    editorState: isCollab
-      ? null
-      : emptyEditor
-      ? undefined
-      : prepopulatedRichText,
+    editorState: JSON.stringify(initialState2),
     namespace: "Playground",
     nodes: [...PlaygroundNodes],
     onError: (error: Error) => {
