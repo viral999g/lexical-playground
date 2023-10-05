@@ -27,9 +27,13 @@ import TestRecorderPlugin from "./plugins/TestRecorderPlugin";
 import TypingPerfPlugin from "./plugins/TypingPerfPlugin";
 import Settings from "./Settings";
 import PlaygroundEditorTheme from "./themes/PlaygroundEditorTheme";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import initialState from "./utils/initialStates/initialState.json";
 import initialState2 from "./utils/initialStates/initialState2.json";
+import { useState } from "react";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $createToggleNodeUtil } from "./nodes/ToggleNode";
 
 console.warn(
   "If you are profiling the playground app, please ensure you turn off the debug view. You can disable it by pressing on the settings control in the bottom-left of your screen and toggling the debug view setting."
@@ -112,6 +116,13 @@ function prepopulatedRichText() {
       )
     );
     root.append(paragraph4);
+
+    root.append(
+      $createToggleNodeUtil({
+        title: "Toggle Node",
+        content: "Content",
+      })
+    );
   }
 }
 
@@ -120,8 +131,10 @@ function App(): JSX.Element {
     settings: { isCollab, emptyEditor, measureTypingPerf },
   } = useSettings();
 
+  const [file, setFile] = useState(initialState2);
+
   const initialConfig = {
-    editorState: JSON.stringify(initialState2),
+    editorState: JSON.stringify(file),
     namespace: "Playground",
     nodes: [...PlaygroundNodes],
     onError: (error: Error) => {
@@ -135,11 +148,6 @@ function App(): JSX.Element {
       <SharedHistoryContext>
         <TableContext>
           <SharedAutocompleteContext>
-            <header>
-              {/* <a href="https://lexical.dev" target="_blank" rel="noreferrer">
-                <img src={logo} alt="Lexical Logo" />
-              </a> */}
-            </header>
             <div className="editor-shell">
               <Editor />
             </div>

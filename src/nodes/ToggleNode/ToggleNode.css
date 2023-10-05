@@ -1,0 +1,12 @@
+.Toggle {
+  display: flex;
+  gap: 5px;
+}
+
+.Toggle-icon {
+  cursor: pointer;
+}
+
+.Toggle:not(.isExpand) .Toggle-content {
+  display: none;
+}

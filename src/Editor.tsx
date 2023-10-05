@@ -76,6 +76,27 @@ import Placeholder from "./ui/Placeholder";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { $getRoot, $getSelection } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import {
+  CustomDraggableBlockPlugin,
+  DraggableWrapper,
+  useDraggableStore,
+} from "./plugins/CustomDraggableBlockPlugin";
+
+import {
+  ToggleNode,
+  ToggleIconNode,
+  ToggleInnerNode,
+  ToggleTitleNode,
+  ToggleContentNode,
+  $createToggleNodeUtil,
+  TogglePlugin,
+} from "./nodes/ToggleNode";
+
+import "./editor.scss";
+
+import initialState from "./utils/initialStates/initialState.json";
+import initialState2 from "./utils/initialStates/initialState2.json";
+import { useMemo } from "react";
 
 const skipCollaborationInit =
   // @ts-ignore
@@ -117,6 +138,23 @@ export default function Editor(): JSX.Element {
     }
   };
 
+  const { isMarkdown } = useDraggableStore();
+  const CustomContent = useMemo(() => {
+    return (
+      <DraggableWrapper>
+        <div
+          style={{
+            position: "relative",
+            paddingLeft: isMarkdown ? undefined : "23px",
+          }}
+        >
+          <ContentEditable />
+          {/*<FloatingToolbar />*/}
+        </div>
+      </DraggableWrapper>
+    );
+  }, [isMarkdown]);
+
   const cellEditorConfig = {
     namespace: "Playground",
     nodes: [...TableCellNodes],
@@ -155,12 +193,34 @@ export default function Editor(): JSX.Element {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
     return editor.registerUpdateListener((listener) => {
-      console.log(listener.editorState.toJSON());
+      console.log("changes", listener.editorState.toJSON());
     });
   }, [editor]);
 
+  const [file, setFile] = useState(initialState2);
+
+  const onButtonClick = (state) => {
+    const editorState = editor.parseEditorState(JSON.stringify(state));
+    editor.setEditorState(editorState);
+    // editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
+  };
+
   return (
     <>
+      <div className="flex gap-3 my-2">
+        <button
+          className="border py-2 text-sm px-5 bg-black text-white rounded-xl cursor-pointer"
+          onClick={() => onButtonClick(initialState2)}
+        >
+          CDD
+        </button>
+        <button
+          className="border py-2 text-sm px-5 bg-black text-white rounded-xl cursor-pointer"
+          onClick={() => onButtonClick(initialState)}
+        >
+          QNA
+        </button>
+      </div>
       {isRichText && <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />}
       <div
         className={`editor-container ${showTreeView ? "tree-view" : ""} ${
@@ -168,6 +228,7 @@ export default function Editor(): JSX.Element {
         }`}
       >
         {isMaxLength && <MaxLengthPlugin maxLength={30} />}
+        <TogglePlugin />
         <DragDropPaste />
         <AutoFocusPlugin />
         <ClearEditorPlugin />
@@ -206,6 +267,8 @@ export default function Editor(): JSX.Element {
               placeholder={placeholder}
               ErrorBoundary={LexicalErrorBoundary}
             />
+            {/* <CustomDraggableBlockPlugin /> */}
+
             <MarkdownShortcutPlugin />
             <CodeHighlightPlugin />
             <ListPlugin />
@@ -220,7 +283,11 @@ export default function Editor(): JSX.Element {
               <AutoFocusPlugin />
               <RichTextPlugin
                 contentEditable={
-                  <ContentEditable className="TableNode__contentEditable" />
+                  <div className="editor-scroller">
+                    <div className="editor" ref={onRef}>
+                      <ContentEditable />
+                    </div>
+                  </div>
                 }
                 placeholder={null}
                 ErrorBoundary={LexicalErrorBoundary}
@@ -248,6 +315,7 @@ export default function Editor(): JSX.Element {
             <CollapsiblePlugin />
             <PageBreakPlugin />
             <LayoutPlugin />
+
             {floatingAnchorElem && !isSmallWidthViewport && (
               <>
                 <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
