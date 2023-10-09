@@ -41,3 +41,12 @@
 .image-control-wrapper--resizing {
   touch-action: none;
 }
+
+.draggable-flex{
+  display: flex;
+  align-items: center;
+}
+
+.image-rounded{
+  border-radius: 50%;
+}

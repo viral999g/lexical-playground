@@ -131,7 +131,7 @@ function App(): JSX.Element {
     settings: { isCollab, emptyEditor, measureTypingPerf },
   } = useSettings();
 
-  const [file, setFile] = useState(initialState2);
+  const [file, setFile] = useState(initialState);
 
   const initialConfig = {
     editorState: JSON.stringify(file),
@@ -148,8 +148,11 @@ function App(): JSX.Element {
       <SharedHistoryContext>
         <TableContext>
           <SharedAutocompleteContext>
-            <div className="editor-shell">
-              <Editor />
+            <div className="grid grid-cols-5">
+              {/* <div className="col-span-2"></div> */}
+              <div className="editor-shell col-span-3">
+                <Editor />
+              </div>
             </div>
             <Settings />
             {isDevPlayground ? <DocsPlugin /> : null}

@@ -97,6 +97,8 @@ import "./editor.scss";
 import initialState from "./utils/initialStates/initialState.json";
 import initialState2 from "./utils/initialStates/initialState2.json";
 import { useMemo } from "react";
+import InlineBlockPlugin from "./plugins/InlineBlockPlugin";
+import InlineTagPlugin from "./plugins/InlineTagPlugin";
 
 const skipCollaborationInit =
   // @ts-ignore
@@ -197,7 +199,7 @@ export default function Editor(): JSX.Element {
     });
   }, [editor]);
 
-  const [file, setFile] = useState(initialState2);
+  const [file, setFile] = useState(initialState);
 
   const onButtonClick = (state) => {
     const editorState = editor.parseEditorState(JSON.stringify(state));
@@ -242,6 +244,8 @@ export default function Editor(): JSX.Element {
         <KeywordsPlugin />
         <SpeechToTextPlugin />
         <AutoLinkPlugin />
+        <InlineBlockPlugin />
+        <InlineTagPlugin />
         <CommentPlugin
           providerFactory={isCollab ? createWebsocketProvider : undefined}
         />

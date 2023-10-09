@@ -47,6 +47,10 @@ import {
   $createToggleNodeUtil,
   TogglePlugin,
 } from "./ToggleNode";
+import { InlineBlockNode } from "../plugins/InlineBlockPlugin/InlineBlockNode";
+import { InlineTitleNode } from "../plugins/InlineBlockPlugin/InlineTitleNode";
+import { InlineTagNode } from "../plugins/InlineTagPlugin/InlineTagNode";
+// import { InlineTagNode } from "../plugins/InlineTagPlugin/InlineTagNode";
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -89,6 +93,9 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   ToggleInnerNode,
   ToggleTitleNode,
   ToggleContentNode,
+  InlineBlockNode,
+  InlineTitleNode,
+  InlineTagNode,
 ];
 
 export default PlaygroundNodes;

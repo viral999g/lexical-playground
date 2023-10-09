@@ -46,6 +46,8 @@ import { INSERT_PAGE_BREAK } from "../PageBreakPlugin";
 import { InsertPollDialog } from "../PollPlugin";
 import { InsertNewTableDialog, InsertTableDialog } from "../TablePlugin";
 import { INSERT_TOGGLE_COMMAND } from "../../nodes/ToggleNode";
+import { INSERT_INLINE_BLOCK_COMMAND } from "../InlineBlockPlugin";
+import { INSERT_INLINE_TAG_COMMAND, InsertTagDialog } from "../InlineTagPlugin";
 
 class ComponentPickerOption extends MenuOption {
   // What shows up in the editor
@@ -296,6 +298,19 @@ function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
           <InsertImageDialog activeEditor={editor} onClose={onClose} />
         )),
     }),
+    new ComponentPickerOption("Inline Rounded Image", {
+      icon: <i className="icon image" />,
+      keywords: ["image", "photo", "picture", "file"],
+      onSelect: () =>
+        showModal("Insert Image", (onClose) => (
+          <InsertImageDialog
+            activeEditor={editor}
+            onClose={onClose}
+            rounded
+            size={24}
+          />
+        )),
+    }),
     new ComponentPickerOption("Collapsible", {
       icon: <i className="icon caret-right" />,
       keywords: ["collapse", "collapsible", "toggle"],
@@ -316,6 +331,28 @@ function getBaseOptions(editor: LexicalEditor, showModal: ShowModal) {
             editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, alignment),
         })
     ),
+    new ComponentPickerOption("Inline Block", {
+      icon: <i className="icon caret-right" />,
+      keywords: ["inline", "block"],
+      onSelect: () =>
+        editor.dispatchCommand(INSERT_INLINE_BLOCK_COMMAND, undefined),
+    }),
+    new ComponentPickerOption("Tag", {
+      icon: <i className="icon caret-right" />,
+      keywords: ["tag"],
+      onSelect: () =>
+        showModal("Insert Tag", (onClose) => (
+          <InsertTagDialog activeEditor={editor} onClose={onClose} />
+        )),
+    }),
+    new ComponentPickerOption("Bulleted Point", {
+      icon: <i className="icon caret-right" />,
+      keywords: ["bullet"],
+      onSelect: () =>
+        showModal("Insert Bulleted Point", (onClose) => (
+          <InsertTagDialog activeEditor={editor} onClose={onClose} bullet />
+        )),
+    }),
   ];
 }
 
