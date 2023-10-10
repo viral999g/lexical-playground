@@ -34,6 +34,8 @@ type EquationComponentProps = {
   inline: boolean;
   nodeKey: NodeKey;
   bullet?: boolean;
+  fontColor?: string;
+  bgColor?: string;
 };
 
 export default function EquationComponent({
@@ -41,6 +43,8 @@ export default function EquationComponent({
   inline,
   nodeKey,
   bullet,
+  fontColor,
+  bgColor,
 }: EquationComponentProps): JSX.Element {
   const [editor] = useLexicalComposerContext();
   const [equationValue, setEquationValue] = useState(equation);
@@ -126,7 +130,16 @@ export default function EquationComponent({
     );
   }
 
-  return <span className="inline-tag-span">{equationValue}</span>;
+  console.log("colors", fontColor, bgColor);
+
+  return (
+    <span
+      style={{ color: fontColor, backgroundColor: bgColor }}
+      className="inline-tag-span"
+    >
+      {equationValue}
+    </span>
+  );
 
   return (
     <>

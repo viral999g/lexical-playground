@@ -15,12 +15,19 @@ import { ErrorBoundary } from "react-error-boundary";
 
 import Button from "../ui/Button";
 import KatexRenderer from "./KatexRenderer";
+import DropdownColorPicker from "./DropdownColorPicker";
 
 type Props = {
   initialEquation?: string;
-  onConfirm: (equation: string, inline: boolean) => void;
+  onConfirm: (
+    equation: string,
+    inline: boolean,
+    fontColor?: string,
+    bgColor?: string
+  ) => void;
   showPreview?: boolean;
   inputLabel?: string;
+  type?: string;
 };
 
 export default function KatexEquationAlterer({
@@ -28,14 +35,18 @@ export default function KatexEquationAlterer({
   initialEquation = "",
   showPreview = true,
   inputLabel = "Equation",
+  type = "equation",
 }: Props): JSX.Element {
   const [editor] = useLexicalComposerContext();
   const [equation, setEquation] = useState<string>(initialEquation);
   const [inline, setInline] = useState<boolean>(true);
 
+  const [fontColor, setFontColor] = useState<string>("#000");
+  const [bgColor, setBgColor] = useState<string>("#fff");
+
   const onClick = useCallback(() => {
-    onConfirm(equation, inline);
-  }, [onConfirm, equation, inline]);
+    onConfirm(equation, inline, fontColor, bgColor);
+  }, [onConfirm, equation, inline, fontColor, bgColor]);
 
   const onCheckboxChange = useCallback(() => {
     setInline(!inline);
@@ -69,6 +80,34 @@ export default function KatexEquationAlterer({
           />
         )}
       </div>
+      {type === "tag" && (
+        <>
+          <div>
+            Font
+            <DropdownColorPicker
+              disabled={false}
+              buttonClassName="toolbar-item color-picker"
+              buttonAriaLabel="Formatting text color"
+              buttonIconClassName="icon font-color"
+              color={fontColor}
+              onChange={setFontColor}
+              title="text color"
+            />
+          </div>
+          <div>
+            Bg
+            <DropdownColorPicker
+              disabled={false}
+              buttonClassName="toolbar-item color-picker"
+              buttonAriaLabel="Formatting text color"
+              buttonIconClassName="icon font-color"
+              color={bgColor}
+              onChange={setBgColor}
+              title="bg color"
+            />
+          </div>
+        </>
+      )}
       {showPreview && (
         <>
           <div className="KatexEquationAlterer_defaultRow">Visualization</div>

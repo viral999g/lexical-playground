@@ -223,7 +223,7 @@ export default function Editor(): JSX.Element {
           QNA
         </button>
       </div>
-      {isRichText && <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />}
+      {/* {isRichText && <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />} */}
       <div
         className={`editor-container ${showTreeView ? "tree-view" : ""} ${
           !isRichText ? "plain-text" : ""

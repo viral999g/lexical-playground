@@ -33,6 +33,8 @@ export type SerializedInlineTagNode = Spread<
     equation: string;
     inline: boolean;
     bullet?: boolean;
+    fontColor?: string;
+    bgColor?: string;
   },
   SerializedLexicalNode
 >;
@@ -55,6 +57,8 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
   __equation: string;
   __inline: boolean;
   __bullet: boolean;
+  __fontColor: string;
+  __bgColor: string;
 
   static getType(): string {
     return "inlineTag";
@@ -65,6 +69,8 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
       node.__equation,
       node.__inline,
       node.__bullet,
+      node.__fontColor,
+      node.__bgColor,
       node.__key
     );
   }
@@ -73,21 +79,25 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
     equation: string,
     inline?: boolean,
     bullet?: boolean,
+    fontColor?: string,
+    bgColor?: string,
     key?: NodeKey
   ) {
     super(key);
     this.__equation = equation;
-    console.log("bullet", bullet);
-
     this.__inline = inline ?? false;
     this.__bullet = bullet ?? false;
+    this.__fontColor = fontColor ?? "";
+    this.__bgColor = bgColor ?? "";
   }
 
   static importJSON(serializedNode: SerializedInlineTagNode): InlineTagNode {
     const node = $createInlineTagNode(
       serializedNode.equation,
       serializedNode.inline,
-      serializedNode.bullet
+      serializedNode.bullet,
+      serializedNode.fontColor,
+      serializedNode.bgColor
     );
     return node;
   }
@@ -97,6 +107,8 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
       equation: this.getEquation(),
       inline: this.__inline,
       bullet: this.__bullet,
+      fontColor: this.__fontColor,
+      bgColor: this.__bgColor,
       type: "inlineTag",
       version: 1,
     };
@@ -105,7 +117,7 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
   createDOM(_config: EditorConfig): HTMLElement {
     const element = document.createElement(this.__inline ? "span" : "div");
     // InlineTagNodes should implement `user-action:none` in their CSS to avoid issues with deletion on Android.
-    element.className = "editor-equation";
+    element.className = "editor-tag";
     return element;
   }
 
@@ -167,6 +179,8 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
           equation={this.__equation}
           inline={this.__inline}
           bullet={this.__bullet}
+          fontColor={this.__fontColor}
+          bgColor={this.__bgColor}
           nodeKey={this.__key}
         />
       </Suspense>
@@ -177,9 +191,17 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
 export function $createInlineTagNode(
   equation = "",
   inline = false,
-  bullet = false
+  bullet = false,
+  fontColor,
+  bgColor
 ): InlineTagNode {
-  const inlineTagNode = new InlineTagNode(equation, inline, bullet);
+  const inlineTagNode = new InlineTagNode(
+    equation,
+    inline,
+    bullet,
+    fontColor,
+    bgColor
+  );
   return $applyNodeReplacement(inlineTagNode);
 }
 

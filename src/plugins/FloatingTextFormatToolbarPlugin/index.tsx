@@ -6,12 +6,12 @@
  *
  */
 
-import './index.css';
+import "./index.css";
 
-import {$isCodeHighlightNode} from '@lexical/code';
-import {$isLinkNode, TOGGLE_LINK_COMMAND} from '@lexical/link';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {mergeRegister} from '@lexical/utils';
+import { $isCodeHighlightNode } from "@lexical/code";
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { mergeRegister } from "@lexical/utils";
 import {
   $getSelection,
   $isParagraphNode,
@@ -21,15 +21,15 @@ import {
   FORMAT_TEXT_COMMAND,
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
-} from 'lexical';
-import {useCallback, useEffect, useRef, useState} from 'react';
-import * as React from 'react';
-import {createPortal} from 'react-dom';
+} from "lexical";
+import { useCallback, useEffect, useRef, useState } from "react";
+import * as React from "react";
+import { createPortal } from "react-dom";
 
-import {getDOMRangeRect} from '../../utils/getDOMRangeRect';
-import {getSelectedNode} from '../../utils/getSelectedNode';
-import {setFloatingElemPosition} from '../../utils/setFloatingElemPosition';
-import {INSERT_INLINE_COMMAND} from '../CommentPlugin';
+import { getDOMRangeRect } from "../../utils/getDOMRangeRect";
+import { getSelectedNode } from "../../utils/getSelectedNode";
+import { setFloatingElemPosition } from "../../utils/setFloatingElemPosition";
+import { INSERT_INLINE_COMMAND } from "../CommentPlugin";
 
 function TextFormatFloatingToolbar({
   editor,
@@ -58,7 +58,7 @@ function TextFormatFloatingToolbar({
 
   const insertLink = useCallback(() => {
     if (!isLink) {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://');
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
     } else {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
@@ -73,34 +73,34 @@ function TextFormatFloatingToolbar({
       popupCharStylesEditorRef?.current &&
       (e.buttons === 1 || e.buttons === 3)
     ) {
-      if (popupCharStylesEditorRef.current.style.pointerEvents !== 'none') {
+      if (popupCharStylesEditorRef.current.style.pointerEvents !== "none") {
         const x = e.clientX;
         const y = e.clientY;
         const elementUnderMouse = document.elementFromPoint(x, y);
 
         if (!popupCharStylesEditorRef.current.contains(elementUnderMouse)) {
           // Mouse is not over the target element => not a normal click, but probably a drag
-          popupCharStylesEditorRef.current.style.pointerEvents = 'none';
+          popupCharStylesEditorRef.current.style.pointerEvents = "none";
         }
       }
     }
   }
   function mouseUpListener(e: MouseEvent) {
     if (popupCharStylesEditorRef?.current) {
-      if (popupCharStylesEditorRef.current.style.pointerEvents !== 'auto') {
-        popupCharStylesEditorRef.current.style.pointerEvents = 'auto';
+      if (popupCharStylesEditorRef.current.style.pointerEvents !== "auto") {
+        popupCharStylesEditorRef.current.style.pointerEvents = "auto";
       }
     }
   }
 
   useEffect(() => {
     if (popupCharStylesEditorRef?.current) {
-      document.addEventListener('mousemove', mouseMoveListener);
-      document.addEventListener('mouseup', mouseUpListener);
+      document.addEventListener("mousemove", mouseMoveListener);
+      document.addEventListener("mouseup", mouseUpListener);
 
       return () => {
-        document.removeEventListener('mousemove', mouseMoveListener);
-        document.removeEventListener('mouseup', mouseUpListener);
+        document.removeEventListener("mousemove", mouseMoveListener);
+        document.removeEventListener("mouseup", mouseUpListener);
       };
     }
   }, [popupCharStylesEditorRef]);
@@ -129,7 +129,7 @@ function TextFormatFloatingToolbar({
         rangeRect,
         popupCharStylesEditorElem,
         anchorElem,
-        isLink,
+        isLink
       );
     }
   }, [editor, anchorElem, isLink]);
@@ -143,15 +143,15 @@ function TextFormatFloatingToolbar({
       });
     };
 
-    window.addEventListener('resize', update);
+    window.addEventListener("resize", update);
     if (scrollerElem) {
-      scrollerElem.addEventListener('scroll', update);
+      scrollerElem.addEventListener("scroll", update);
     }
 
     return () => {
-      window.removeEventListener('resize', update);
+      window.removeEventListener("resize", update);
       if (scrollerElem) {
-        scrollerElem.removeEventListener('scroll', update);
+        scrollerElem.removeEventListener("scroll", update);
       }
     };
   }, [editor, updateTextFormatFloatingToolbar, anchorElem]);
@@ -161,7 +161,7 @@ function TextFormatFloatingToolbar({
       updateTextFormatFloatingToolbar();
     });
     return mergeRegister(
-      editor.registerUpdateListener(({editorState}) => {
+      editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           updateTextFormatFloatingToolbar();
         });
@@ -173,10 +173,27 @@ function TextFormatFloatingToolbar({
           updateTextFormatFloatingToolbar();
           return false;
         },
-        COMMAND_PRIORITY_LOW,
-      ),
+        COMMAND_PRIORITY_LOW
+      )
     );
   }, [editor, updateTextFormatFloatingToolbar]);
+
+  const createReport = (type) => {
+    if (window) {
+      const selection = window.getSelection();
+      const selectedText = selection?.focusNode?.textContent?.substring(
+        selection?.anchorOffset,
+        selection?.focusOffset
+      );
+
+      window
+        .open(
+          `https://test.wokelo.ai/dashboard/workflows/sector-snapshot?search_query=${selectedText}`,
+          "_blank"
+        )
+        ?.focus();
+    }
+  };
 
   return (
     <div ref={popupCharStylesEditorRef} className="floating-text-format-popup">
@@ -185,82 +202,100 @@ function TextFormatFloatingToolbar({
           <button
             type="button"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
             }}
-            className={'popup-item spaced ' + (isBold ? 'active' : '')}
-            aria-label="Format text as bold">
+            className={"popup-item spaced " + (isBold ? "active" : "")}
+            aria-label="Format text as bold"
+          >
             <i className="format bold" />
           </button>
           <button
             type="button"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
             }}
-            className={'popup-item spaced ' + (isItalic ? 'active' : '')}
-            aria-label="Format text as italics">
+            className={"popup-item spaced " + (isItalic ? "active" : "")}
+            aria-label="Format text as italics"
+          >
             <i className="format italic" />
           </button>
           <button
             type="button"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
             }}
-            className={'popup-item spaced ' + (isUnderline ? 'active' : '')}
-            aria-label="Format text to underlined">
+            className={"popup-item spaced " + (isUnderline ? "active" : "")}
+            aria-label="Format text to underlined"
+          >
             <i className="format underline" />
           </button>
           <button
             type="button"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
             }}
-            className={'popup-item spaced ' + (isStrikethrough ? 'active' : '')}
-            aria-label="Format text with a strikethrough">
+            className={"popup-item spaced " + (isStrikethrough ? "active" : "")}
+            aria-label="Format text with a strikethrough"
+          >
             <i className="format strikethrough" />
           </button>
           <button
             type="button"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
             }}
-            className={'popup-item spaced ' + (isSubscript ? 'active' : '')}
+            className={"popup-item spaced " + (isSubscript ? "active" : "")}
             title="Subscript"
-            aria-label="Format Subscript">
+            aria-label="Format Subscript"
+          >
             <i className="format subscript" />
           </button>
           <button
             type="button"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'superscript');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
             }}
-            className={'popup-item spaced ' + (isSuperscript ? 'active' : '')}
+            className={"popup-item spaced " + (isSuperscript ? "active" : "")}
             title="Superscript"
-            aria-label="Format Superscript">
+            aria-label="Format Superscript"
+          >
             <i className="format superscript" />
           </button>
           <button
             type="button"
             onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
             }}
-            className={'popup-item spaced ' + (isCode ? 'active' : '')}
-            aria-label="Insert code block">
+            className={"popup-item spaced " + (isCode ? "active" : "")}
+            aria-label="Insert code block"
+          >
             <i className="format code" />
           </button>
           <button
             type="button"
             onClick={insertLink}
-            className={'popup-item spaced ' + (isLink ? 'active' : '')}
-            aria-label="Insert link">
+            className={"popup-item spaced " + (isLink ? "active" : "")}
+            aria-label="Insert link"
+          >
             <i className="format link" />
+          </button>
+          <button
+            type="button"
+            onClick={createReport}
+            className={""}
+            aria-label="Create Industry Primer"
+          >
+            <i className="format link" />
+            Industry Primer
           </button>
         </>
       )}
       <button
         type="button"
         onClick={insertComment}
-        className={'popup-item spaced insert-comment'}
-        aria-label="Insert comment">
+        className={"popup-item spaced insert-comment"}
+        aria-label="Insert comment"
+      >
         <i className="format add-comment" />
       </button>
     </div>
@@ -269,7 +304,7 @@ function TextFormatFloatingToolbar({
 
 function useFloatingTextFormatToolbar(
   editor: LexicalEditor,
-  anchorElem: HTMLElement,
+  anchorElem: HTMLElement
 ): JSX.Element | null {
   const [isText, setIsText] = useState(false);
   const [isLink, setIsLink] = useState(false);
@@ -308,13 +343,13 @@ function useFloatingTextFormatToolbar(
       const node = getSelectedNode(selection);
 
       // Update text format
-      setIsBold(selection.hasFormat('bold'));
-      setIsItalic(selection.hasFormat('italic'));
-      setIsUnderline(selection.hasFormat('underline'));
-      setIsStrikethrough(selection.hasFormat('strikethrough'));
-      setIsSubscript(selection.hasFormat('subscript'));
-      setIsSuperscript(selection.hasFormat('superscript'));
-      setIsCode(selection.hasFormat('code'));
+      setIsBold(selection.hasFormat("bold"));
+      setIsItalic(selection.hasFormat("italic"));
+      setIsUnderline(selection.hasFormat("underline"));
+      setIsStrikethrough(selection.hasFormat("strikethrough"));
+      setIsSubscript(selection.hasFormat("subscript"));
+      setIsSuperscript(selection.hasFormat("superscript"));
+      setIsCode(selection.hasFormat("code"));
 
       // Update links
       const parent = node.getParent();
@@ -326,15 +361,15 @@ function useFloatingTextFormatToolbar(
 
       if (
         !$isCodeHighlightNode(selection.anchor.getNode()) &&
-        selection.getTextContent() !== ''
+        selection.getTextContent() !== ""
       ) {
         setIsText($isTextNode(node) || $isParagraphNode(node));
       } else {
         setIsText(false);
       }
 
-      const rawTextContent = selection.getTextContent().replace(/\n/g, '');
-      if (!selection.isCollapsed() && rawTextContent === '') {
+      const rawTextContent = selection.getTextContent().replace(/\n/g, "");
+      if (!selection.isCollapsed() && rawTextContent === "") {
         setIsText(false);
         return;
       }
@@ -342,9 +377,9 @@ function useFloatingTextFormatToolbar(
   }, [editor]);
 
   useEffect(() => {
-    document.addEventListener('selectionchange', updatePopup);
+    document.addEventListener("selectionchange", updatePopup);
     return () => {
-      document.removeEventListener('selectionchange', updatePopup);
+      document.removeEventListener("selectionchange", updatePopup);
     };
   }, [updatePopup]);
 
@@ -357,7 +392,7 @@ function useFloatingTextFormatToolbar(
         if (editor.getRootElement() === null) {
           setIsText(false);
         }
-      }),
+      })
     );
   }, [editor, updatePopup]);
 
@@ -378,7 +413,7 @@ function useFloatingTextFormatToolbar(
       isUnderline={isUnderline}
       isCode={isCode}
     />,
-    anchorElem,
+    anchorElem
   );
 }
 

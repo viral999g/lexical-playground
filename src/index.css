@@ -12,10 +12,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+	font-family: 'DM-Sans-Regular';
+	src: url('./assets/font/DMSans-Regular.ttf');
+}
+
+@font-face {
+	font-family: 'DM-Sans-Medium';
+	src: url('./assets/font/DMSans-Medium.ttf');
+}
+
+@font-face {
+	font-family: 'DM-Sans-Bold';
+	src: url('./assets/font/DMSans-Bold.ttf');
+}
+
+@font-face {
+	font-family: 'DM-Sans-italic';
+	src: url('./assets/font/DMSans-Italic.ttf');
+}
+
+@font-face {
+	font-family: 'DM-Sans-Bolditalic';
+	src: url('./assets/font/DMSans-BoldItalic.ttf');
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular',
-    sans-serif;
+  font-family: 'DM-Sans-Medium', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #eee;
@@ -1784,4 +1808,34 @@ hr.selected {
   background-color: #eee !important;
   margin-bottom: 10px;
   width: 100%;
+}
+
+.PlaygroundEditorTheme__h1{
+  font-size: 16px !important;
+  line-height: 24px;
+  letter-spacing: -0.18px;
+  font-weight: 600;
+  margin-bottom: 8px !important;
+}
+
+.PlaygroundEditorTheme__h2{
+  font-size: 14px !important;
+  line-height: 20px;
+  letter-spacing: -0.05px;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  color: #000 !important;
+  margin-bottom: 8px !important;
+  
+}
+
+.PlaygroundEditorTheme__paragraph{
+  font-size: 14px !important;
+  line-height: 20px;
+  letter-spacing: -0.05px;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  color: #000 !important;
+  margin-bottom: 8px !important;
+  
 }

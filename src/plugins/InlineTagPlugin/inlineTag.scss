@@ -1,5 +1,5 @@
 .inline-tag-span {
-  margin: 0px 6px;
+  margin: auto 6px;
 
   padding: 2px 8px;
   border-radius: 32px;
@@ -8,7 +8,7 @@
   font-size: 12px;
   line-height: 18px;
   letter-spacing: -0.32px;
-  vertical-align: middle;
+  vertical-align: text-top;
 }
 
 .inline-tag-bullet {
@@ -30,4 +30,9 @@
     letter-spacing: -0.32px;
     vertical-align: middle;
   }
+}
+
+.editor-tag {
+  //   display: flex;
+  //   align-items: center;
 }

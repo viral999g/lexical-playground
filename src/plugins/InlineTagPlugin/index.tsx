@@ -30,6 +30,8 @@ type CommandPayload = {
   equation: string;
   inline: boolean;
   bullet?: boolean;
+  fontColor?: string;
+  bgColor?: string;
 };
 
 export const INSERT_INLINE_TAG_COMMAND: LexicalCommand<CommandPayload> =
@@ -45,11 +47,18 @@ export function InsertTagDialog({
   bullet?: boolean;
 }): JSX.Element {
   const onEquationConfirm = useCallback(
-    (equation: string, inline: boolean) => {
+    (
+      equation: string,
+      inline: boolean,
+      fontColor?: string,
+      bgColor?: string
+    ) => {
       activeEditor.dispatchCommand(INSERT_INLINE_TAG_COMMAND, {
         equation,
         inline,
         bullet,
+        fontColor,
+        bgColor,
       });
       onClose();
     },
@@ -61,6 +70,7 @@ export function InsertTagDialog({
       inputLabel="Tag value"
       onConfirm={onEquationConfirm}
       showPreview={false}
+      type="tag"
     />
   );
 }
@@ -72,8 +82,14 @@ export default function InlineTagPlugin(): JSX.Element | null {
     return editor.registerCommand<CommandPayload>(
       INSERT_INLINE_TAG_COMMAND,
       (payload) => {
-        const { equation, inline, bullet } = payload;
-        const equationNode = $createInlineTagNode(equation, inline, bullet);
+        const { equation, inline, bullet, fontColor, bgColor } = payload;
+        const equationNode = $createInlineTagNode(
+          equation,
+          inline,
+          bullet,
+          fontColor,
+          bgColor
+        );
 
         $insertNodes([equationNode]);
         if ($isRootOrShadowRoot(equationNode.getParentOrThrow())) {

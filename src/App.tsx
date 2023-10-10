@@ -148,11 +148,21 @@ function App(): JSX.Element {
       <SharedHistoryContext>
         <TableContext>
           <SharedAutocompleteContext>
-            <div className="grid grid-cols-5">
-              {/* <div className="col-span-2"></div> */}
-              <div className="editor-shell col-span-3">
-                <Editor />
+            {/* <div className="grid grid-cols-5">
+              <div className="col-span-1"></div>
+              
+              <div className="col-span-1"></div>
+            </div> */}
+            <div className="w-full flex justify-center">
+              <div
+                className="overflow-x-auto bg-white flex"
+                style={{ width: "calc(100% - 300px)", maxHeight: "100vh" }}
+              >
+                <div className="editor-shell p-3" style={{ maxWidth: 700 }}>
+                  <Editor />
+                </div>
               </div>
+              <div style={{ minWidth: 300 }}></div>
             </div>
             <Settings />
             {isDevPlayground ? <DocsPlugin /> : null}

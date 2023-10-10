@@ -34,15 +34,15 @@
 .table-of-contents {
   color: #65676b;
   position: fixed;
-  top: 200px;
+  top: 50px;
   right: -35px;
   padding: 10px;
-  width: 250px;
+  width: 330px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   z-index: 1;
-  height: 300px;
+  max-height: calc(100vh - 100px);
 }
 
 .first-heading {
@@ -57,8 +57,8 @@
   margin-left: 10px;
   padding: 0;
   overflow: scroll;
-  width: 200px;
-  height: 220px;
+  width: 280px;
+  /* height: 220px; */
   overflow-x: hidden;
   overflow-y: auto;
   -ms-overflow-style: none; /* IE and Edge */
@@ -73,9 +73,9 @@
 .headings::before {
   content: ' ';
   position: absolute;
-  height: 220px;
+  height: 100%;
   width: 4px;
-  right: 240px;
+  right: 320px;
   margin-top: 5px;
   background-color: #ccd0d5;
   border-radius: 2px;
