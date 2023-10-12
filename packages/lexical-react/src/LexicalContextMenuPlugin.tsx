@@ -5,20 +5,24 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import type {MenuRenderFn, MenuResolution} from './shared/LexicalMenu';
+import type { MenuRenderFn, MenuResolution } from "./shared/LexicalMenu";
 
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {LexicalNode} from 'lexical';
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { LexicalNode } from "lexical";
 import {
   MutableRefObject,
   ReactPortal,
   useCallback,
   useEffect,
   useState,
-} from 'react';
-import * as React from 'react';
+} from "react";
+import * as React from "react";
 
-import {LexicalMenu, MenuOption, useMenuAnchorRef} from './shared/LexicalMenu';
+import {
+  LexicalMenu,
+  MenuOption,
+  useMenuAnchorRef,
+} from "./shared/LexicalMenu";
 
 export type ContextMenuRenderFn<TOption extends MenuOption> = (
   anchorElementRef: MutableRefObject<HTMLElement | null>,
@@ -30,7 +34,7 @@ export type ContextMenuRenderFn<TOption extends MenuOption> = (
   },
   menuProps: {
     setMenuRef: (element: HTMLElement | null) => void;
-  },
+  }
 ) => ReactPortal | JSX.Element | null;
 
 export type LexicalContextMenuPluginProps<TOption extends MenuOption> = {
@@ -38,7 +42,7 @@ export type LexicalContextMenuPluginProps<TOption extends MenuOption> = {
     option: TOption,
     textNodeContainingQuery: LexicalNode | null,
     closeMenu: () => void,
-    matchingString: string,
+    matchingString: string
   ) => void;
   options: Array<TOption>;
   onClose?: () => void;
@@ -64,7 +68,7 @@ export function LexicalContextMenuPlugin<TOption extends MenuOption>({
   const anchorElementRef = useMenuAnchorRef(
     resolution,
     setResolution,
-    anchorClassName,
+    anchorClassName
   );
 
   const closeNodeMenu = useCallback(() => {
@@ -81,7 +85,7 @@ export function LexicalContextMenuPlugin<TOption extends MenuOption>({
         onOpen(res);
       }
     },
-    [onOpen, resolution],
+    [onOpen, resolution]
   );
 
   const handleContextMenu = useCallback(
@@ -93,11 +97,11 @@ export function LexicalContextMenuPlugin<TOption extends MenuOption>({
             event.clientX,
             event.clientY,
             PRE_PORTAL_DIV_SIZE,
-            PRE_PORTAL_DIV_SIZE,
+            PRE_PORTAL_DIV_SIZE
           ),
       });
     },
-    [openNodeMenu],
+    [openNodeMenu]
   );
 
   const handleClick = useCallback(
@@ -111,21 +115,21 @@ export function LexicalContextMenuPlugin<TOption extends MenuOption>({
         closeNodeMenu();
       }
     },
-    [closeNodeMenu, resolution],
+    [closeNodeMenu, resolution]
   );
 
   useEffect(() => {
     const editorElement = editor.getRootElement();
     if (editorElement) {
-      editorElement.addEventListener('contextmenu', handleContextMenu);
+      editorElement.addEventListener("contextmenu", handleContextMenu);
       return () =>
-        editorElement.removeEventListener('contextmenu', handleContextMenu);
+        editorElement.removeEventListener("contextmenu", handleContextMenu);
     }
   }, [editor, handleContextMenu]);
 
   useEffect(() => {
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
   }, [editor, handleClick]);
 
   return resolution === null || editor === null ? null : (
@@ -147,4 +151,4 @@ export function LexicalContextMenuPlugin<TOption extends MenuOption>({
   );
 }
 
-export {MenuOption, MenuRenderFn, MenuResolution};
+export { MenuOption, MenuRenderFn, MenuResolution };

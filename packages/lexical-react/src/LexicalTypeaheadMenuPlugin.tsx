@@ -11,9 +11,9 @@ import type {
   MenuResolution,
   MenuTextMatch,
   TriggerFn,
-} from './shared/LexicalMenu';
+} from "./shared/LexicalMenu";
 
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   $getSelection,
   $isRangeSelection,
@@ -23,18 +23,22 @@ import {
   LexicalEditor,
   RangeSelection,
   TextNode,
-} from 'lexical';
-import {useCallback, useEffect, useState} from 'react';
-import * as React from 'react';
+} from "lexical";
+import { useCallback, useEffect, useState } from "react";
+import * as React from "react";
 
-import {LexicalMenu, MenuOption, useMenuAnchorRef} from './shared/LexicalMenu';
+import {
+  LexicalMenu,
+  MenuOption,
+  useMenuAnchorRef,
+} from "./shared/LexicalMenu";
 
 export const PUNCTUATION =
-  '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
+  "\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%'\"~=<>_:;";
 
 function getTextUpToAnchor(selection: RangeSelection): string | null {
   const anchor = selection.anchor;
-  if (anchor.type !== 'text') {
+  if (anchor.type !== "text") {
     return null;
   }
   const anchorNode = anchor.getNode();
@@ -48,7 +52,7 @@ function getTextUpToAnchor(selection: RangeSelection): string | null {
 function tryToPositionRange(
   leadOffset: number,
   range: Range,
-  editorWindow: Window,
+  editorWindow: Window
 ): boolean {
   const domSelection = editorWindow.getSelection();
   if (domSelection === null || !domSelection.isCollapsed) {
@@ -86,7 +90,7 @@ function getQueryTextForSearch(editor: LexicalEditor): string | null {
 
 function isSelectionOnEntityBoundary(
   editor: LexicalEditor,
-  offset: number,
+  offset: number
 ): boolean {
   if (offset !== 0) {
     return false;
@@ -114,14 +118,14 @@ function startTransition(callback: () => void) {
 // Got from https://stackoverflow.com/a/42543908/2013580
 export function getScrollParent(
   element: HTMLElement,
-  includeHidden: boolean,
+  includeHidden: boolean
 ): HTMLElement | HTMLBodyElement {
   let style = getComputedStyle(element);
-  const excludeStaticParent = style.position === 'absolute';
+  const excludeStaticParent = style.position === "absolute";
   const overflowRegex = includeHidden
     ? /(auto|scroll|hidden)/
     : /(auto|scroll)/;
-  if (style.position === 'fixed') {
+  if (style.position === "fixed") {
     return document.body;
   }
   for (
@@ -130,7 +134,7 @@ export function getScrollParent(
 
   ) {
     style = getComputedStyle(parent);
-    if (excludeStaticParent && style.position === 'static') {
+    if (excludeStaticParent && style.position === "static") {
       continue;
     }
     if (
@@ -142,31 +146,31 @@ export function getScrollParent(
   return document.body;
 }
 
-export {useDynamicPositioning} from './shared/LexicalMenu';
+export { useDynamicPositioning } from "./shared/LexicalMenu";
 
 export const SCROLL_TYPEAHEAD_OPTION_INTO_VIEW_COMMAND: LexicalCommand<{
   index: number;
   option: MenuOption;
-}> = createCommand('SCROLL_TYPEAHEAD_OPTION_INTO_VIEW_COMMAND');
+}> = createCommand("SCROLL_TYPEAHEAD_OPTION_INTO_VIEW_COMMAND");
 
 export function useBasicTypeaheadTriggerMatch(
   trigger: string,
-  {minLength = 1, maxLength = 75}: {minLength?: number; maxLength?: number},
+  { minLength = 1, maxLength = 75 }: { minLength?: number; maxLength?: number }
 ): TriggerFn {
   return useCallback(
     (text: string) => {
-      const validChars = '[^' + trigger + PUNCTUATION + '\\s]';
+      const validChars = "[^" + trigger + PUNCTUATION + "\\s]";
       const TypeaheadTriggerRegex = new RegExp(
-        '(^|\\s|\\()(' +
-          '[' +
+        "(^|\\s|\\()(" +
+          "[" +
           trigger +
-          ']' +
-          '((?:' +
+          "]" +
+          "((?:" +
           validChars +
-          '){0,' +
+          "){0," +
           maxLength +
-          '})' +
-          ')$',
+          "})" +
+          ")$"
       );
       const match = TypeaheadTriggerRegex.exec(text);
       if (match !== null) {
@@ -182,7 +186,7 @@ export function useBasicTypeaheadTriggerMatch(
       }
       return null;
     },
-    [maxLength, minLength, trigger],
+    [maxLength, minLength, trigger]
   );
 }
 
@@ -192,7 +196,7 @@ export type TypeaheadMenuPluginProps<TOption extends MenuOption> = {
     option: TOption,
     textNodeContainingQuery: TextNode | null,
     closeMenu: () => void,
-    matchingString: string,
+    matchingString: string
   ) => void;
   options: Array<TOption>;
   menuRenderFn: MenuRenderFn<TOption>;
@@ -217,7 +221,7 @@ export function LexicalTypeaheadMenuPlugin<TOption extends MenuOption>({
   const anchorElementRef = useMenuAnchorRef(
     resolution,
     setResolution,
-    anchorClassName,
+    anchorClassName
   );
 
   const closeTypeahead = useCallback(() => {
@@ -234,7 +238,7 @@ export function LexicalTypeaheadMenuPlugin<TOption extends MenuOption>({
         onOpen(res);
       }
     },
-    [onOpen, resolution],
+    [onOpen, resolution]
   );
 
   useEffect(() => {
@@ -265,14 +269,14 @@ export function LexicalTypeaheadMenuPlugin<TOption extends MenuOption>({
           const isRangePositioned = tryToPositionRange(
             match.leadOffset,
             range,
-            editorWindow,
+            editorWindow
           );
           if (isRangePositioned !== null) {
             startTransition(() =>
               openTypeahead({
                 getRect: () => range.getBoundingClientRect(),
                 match,
-              }),
+              })
             );
             return;
           }
@@ -295,6 +299,8 @@ export function LexicalTypeaheadMenuPlugin<TOption extends MenuOption>({
     openTypeahead,
   ]);
 
+  console.log("target here3");
+
   return resolution === null || editor === null ? null : (
     <LexicalMenu
       close={closeTypeahead}
@@ -309,4 +315,4 @@ export function LexicalTypeaheadMenuPlugin<TOption extends MenuOption>({
   );
 }
 
-export {MenuOption, MenuRenderFn, MenuResolution, MenuTextMatch, TriggerFn};
+export { MenuOption, MenuRenderFn, MenuResolution, MenuTextMatch, TriggerFn };

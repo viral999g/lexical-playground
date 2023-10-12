@@ -242,6 +242,7 @@ function TableActionMenu({
     const menuButtonElement = contextRef.current;
     const dropDownElement = dropDownRef.current;
     const rootElement = editor.getRootElement();
+    console.log("menuButtonElement", menuButtonElement);
 
     if (
       menuButtonElement != null &&

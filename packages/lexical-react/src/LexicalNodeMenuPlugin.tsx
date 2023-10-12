@@ -6,14 +6,18 @@
  *
  */
 
-import type {MenuRenderFn, MenuResolution} from './shared/LexicalMenu';
+import type { MenuRenderFn, MenuResolution } from "./shared/LexicalMenu";
 
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {$getNodeByKey, NodeKey, TextNode} from 'lexical';
-import {useCallback, useEffect, useState} from 'react';
-import * as React from 'react';
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $getNodeByKey, NodeKey, TextNode } from "lexical";
+import { useCallback, useEffect, useState } from "react";
+import * as React from "react";
 
-import {LexicalMenu, MenuOption, useMenuAnchorRef} from './shared/LexicalMenu';
+import {
+  LexicalMenu,
+  MenuOption,
+  useMenuAnchorRef,
+} from "./shared/LexicalMenu";
 
 function startTransition(callback: () => void) {
   if (React.startTransition) {
@@ -28,7 +32,7 @@ export type NodeMenuPluginProps<TOption extends MenuOption> = {
     option: TOption,
     textNodeContainingQuery: TextNode | null,
     closeMenu: () => void,
-    matchingString: string,
+    matchingString: string
   ) => void;
   options: Array<TOption>;
   nodeKey: NodeKey | null;
@@ -52,7 +56,7 @@ export function LexicalNodeMenuPlugin<TOption extends MenuOption>({
   const anchorElementRef = useMenuAnchorRef(
     resolution,
     setResolution,
-    anchorClassName,
+    anchorClassName
   );
 
   const closeNodeMenu = useCallback(() => {
@@ -69,7 +73,7 @@ export function LexicalNodeMenuPlugin<TOption extends MenuOption>({
         onOpen(res);
       }
     },
-    [onOpen, resolution],
+    [onOpen, resolution]
   );
 
   const positionOrCloseMenu = useCallback(() => {
@@ -82,7 +86,7 @@ export function LexicalNodeMenuPlugin<TOption extends MenuOption>({
             startTransition(() =>
               openNodeMenu({
                 getRect: () => domElement.getBoundingClientRect(),
-              }),
+              })
             );
           }
         }
@@ -98,13 +102,14 @@ export function LexicalNodeMenuPlugin<TOption extends MenuOption>({
 
   useEffect(() => {
     if (nodeKey != null) {
-      return editor.registerUpdateListener(({dirtyElements}) => {
+      return editor.registerUpdateListener(({ dirtyElements }) => {
         if (dirtyElements.get(nodeKey)) {
           positionOrCloseMenu();
         }
       });
     }
   }, [editor, positionOrCloseMenu, nodeKey]);
+  console.log("target here 2");
 
   return resolution === null || editor === null ? null : (
     <LexicalMenu
@@ -119,4 +124,4 @@ export function LexicalNodeMenuPlugin<TOption extends MenuOption>({
   );
 }
 
-export {MenuOption, MenuRenderFn, MenuResolution};
+export { MenuOption, MenuRenderFn, MenuResolution };
