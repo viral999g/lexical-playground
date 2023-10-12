@@ -239,7 +239,6 @@ export function InsertImageDialog({
       {mode === "file" && (
         <InsertImageUploadedDialogBody
           onClick={onClick}
-          onClick={onClick}
           rounded={rounded}
           size={size}
         />
