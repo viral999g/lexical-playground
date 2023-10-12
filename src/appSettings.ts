@@ -42,7 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   measureTypingPerf: false,
   shouldUseLexicalContextMenu: false,
   showNestedEditorTreeView: false,
-  showTableOfContents: false,
+  showTableOfContents: true,
   showTreeView: false,
   tableCellBackgroundColor: true,
   tableCellMerge: true,
