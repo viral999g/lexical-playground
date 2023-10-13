@@ -41,8 +41,8 @@ export default function KatexEquationAlterer({
   const [equation, setEquation] = useState<string>(initialEquation);
   const [inline, setInline] = useState<boolean>(true);
 
-  const [fontColor, setFontColor] = useState<string>("#000");
-  const [bgColor, setBgColor] = useState<string>("#fff");
+  const [fontColor, setFontColor] = useState<string>("#344054");
+  const [bgColor, setBgColor] = useState<string>("#F2F4F7");
 
   const onClick = useCallback(() => {
     onConfirm(equation, inline, fontColor, bgColor);
@@ -69,6 +69,7 @@ export default function KatexEquationAlterer({
             }}
             value={equation}
             className="KatexEquationAlterer_textArea"
+            style={{ borderRadius: 5, borderWidth: 1 }}
           />
         ) : (
           <textarea
@@ -81,9 +82,12 @@ export default function KatexEquationAlterer({
         )}
       </div>
       {type === "tag" && (
-        <>
+        <div
+          className="toolbar mt-3 flex justify-between"
+          style={{ height: "auto" }}
+        >
           <div>
-            Font
+            Font Color
             <DropdownColorPicker
               disabled={false}
               buttonClassName="toolbar-item color-picker"
@@ -95,18 +99,18 @@ export default function KatexEquationAlterer({
             />
           </div>
           <div>
-            Bg
+            Background Color
             <DropdownColorPicker
               disabled={false}
               buttonClassName="toolbar-item color-picker"
               buttonAriaLabel="Formatting text color"
-              buttonIconClassName="icon font-color"
+              buttonIconClassName="icon bg-color"
               color={bgColor}
               onChange={setBgColor}
               title="bg color"
             />
           </div>
-        </>
+        </div>
       )}
       {showPreview && (
         <>

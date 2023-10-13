@@ -70,7 +70,7 @@ export function InsertTagDialog({
       inputLabel="Tag value"
       onConfirm={onEquationConfirm}
       showPreview={false}
-      type="tag"
+      type={bullet ? "bullet" : "tag"}
     />
   );
 }

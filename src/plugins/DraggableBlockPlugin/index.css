@@ -28,9 +28,9 @@
   cursor: grabbing;
 }
 
-.draggable-block-menu:hover {
+/* .draggable-block-menu:hover {
   background-color: #efefef;
-}
+} */
 
 .draggable-block-target-line {
   pointer-events: none;
@@ -63,7 +63,7 @@
   margin-right: 0px;
 }
 
-.add-comp-menu .item .text{
+.add-comp-menu .item .text {
   margin-left: 8px;
   flex-grow: 0;
 }
