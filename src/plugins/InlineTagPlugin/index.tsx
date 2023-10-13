@@ -67,7 +67,7 @@ export function InsertTagDialog({
 
   return (
     <KatexEquationAlterer
-      inputLabel="Tag value"
+      inputLabel={bullet ? "Text" : "Tag value"}
       onConfirm={onEquationConfirm}
       showPreview={false}
       type={bullet ? "bullet" : "tag"}
