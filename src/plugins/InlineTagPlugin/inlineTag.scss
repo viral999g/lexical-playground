@@ -10,6 +10,13 @@
   letter-spacing: -0.32px;
   vertical-align: text-top;
   font-weight: 400;
+
+  div {
+    display: flex;
+    align-items: center;
+    margin-right: 4px;
+    padding: 0 !important;
+  }
 }
 
 .inline-tag-bullet {

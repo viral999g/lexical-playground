@@ -35,6 +35,7 @@ export type SerializedInlineTagNode = Spread<
     bullet?: boolean;
     fontColor?: string;
     bgColor?: string;
+    icon?: string;
   },
   SerializedLexicalNode
 >;
@@ -46,7 +47,7 @@ function convertEquationElement(
   const inline = domNode.getAttribute("data-lexical-tag") === "true";
   // Decode the equation from base64
   if (equation) {
-    const node = $createInlineTagNode(equation, inline);
+    const node = $createInlineTagNode(equation, inline, false, "", "", "");
     return { node };
   }
 
@@ -59,6 +60,7 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
   __bullet: boolean;
   __fontColor: string;
   __bgColor: string;
+  __icon?: string;
 
   static getType(): string {
     return "inlineTag";
@@ -71,6 +73,7 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
       node.__bullet,
       node.__fontColor,
       node.__bgColor,
+      node.__icon,
       node.__key
     );
   }
@@ -81,6 +84,7 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
     bullet?: boolean,
     fontColor?: string,
     bgColor?: string,
+    icon?: string,
     key?: NodeKey
   ) {
     super(key);
@@ -89,6 +93,7 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
     this.__bullet = bullet ?? false;
     this.__fontColor = fontColor ?? "";
     this.__bgColor = bgColor ?? "";
+    this.__icon = icon;
   }
 
   static importJSON(serializedNode: SerializedInlineTagNode): InlineTagNode {
@@ -97,7 +102,8 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
       serializedNode.inline,
       serializedNode.bullet,
       serializedNode.fontColor,
-      serializedNode.bgColor
+      serializedNode.bgColor,
+      serializedNode.icon
     );
     return node;
   }
@@ -109,6 +115,7 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
       bullet: this.__bullet,
       fontColor: this.__fontColor,
       bgColor: this.__bgColor,
+      icon: this.getIcon(),
       type: "inlineTag",
       version: 1,
     };
@@ -172,6 +179,15 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
     writable.__equation = equation;
   }
 
+  getIcon(): string | undefined {
+    return this.__icon;
+  }
+
+  setIcon(icon: string): void {
+    const writable = this.getWritable();
+    writable.__icon = icon;
+  }
+
   decorate(): JSX.Element {
     return (
       <Suspense fallback={null}>
@@ -181,6 +197,7 @@ export class InlineTagNode extends DecoratorNode<JSX.Element> {
           bullet={this.__bullet}
           fontColor={this.__fontColor}
           bgColor={this.__bgColor}
+          icon={this.__icon}
           nodeKey={this.__key}
         />
       </Suspense>
@@ -193,14 +210,16 @@ export function $createInlineTagNode(
   inline = false,
   bullet = false,
   fontColor,
-  bgColor
+  bgColor,
+  icon
 ): InlineTagNode {
   const inlineTagNode = new InlineTagNode(
     equation,
     inline,
     bullet,
     fontColor,
-    bgColor
+    bgColor,
+    icon
   );
   return $applyNodeReplacement(inlineTagNode);
 }

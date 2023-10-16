@@ -27,7 +27,7 @@
 
 .KatexEquationAlterer_centerRow {
   display: flex;
-  flex-direction: 'row';
+  flex-direction: "row";
   margin-top: 10px;
   margin-bottom: 10px;
   justify-content: center;
@@ -38,4 +38,19 @@
   width: 100%;
   resize: none;
   padding: 7px;
+}
+
+.icon-picker {
+  height: auto;
+  margin-top: 8px;
+  & > div {
+    margin-top: 8px;
+    height: auto;
+    padding: 0;
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+  }
 }

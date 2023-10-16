@@ -24,6 +24,7 @@ import { $isInlineTagNode } from "./InlineTagNode";
 import KatexRenderer from "../../ui/KatexRenderer";
 import EquationEditor from "../../ui/EquationEditor";
 import DotIcon from "./DotIcon.svg";
+import { IconPickerItem } from "react-fa-icon-picker";
 
 // import EquationEditor from '../ui/EquationEditor';
 // import KatexRenderer from '../ui/KatexRenderer';
@@ -36,6 +37,7 @@ type EquationComponentProps = {
   bullet?: boolean;
   fontColor?: string;
   bgColor?: string;
+  icon?: string;
 };
 
 export default function EquationComponent({
@@ -45,6 +47,7 @@ export default function EquationComponent({
   bullet,
   fontColor,
   bgColor,
+  icon,
 }: EquationComponentProps): JSX.Element {
   const [editor] = useLexicalComposerContext();
   const [equationValue, setEquationValue] = useState(equation);
@@ -134,9 +137,14 @@ export default function EquationComponent({
 
   return (
     <span
-      style={{ color: fontColor, backgroundColor: bgColor }}
-      className="inline-tag-span"
+      style={{
+        color: fontColor,
+        backgroundColor: bgColor,
+        width: "fit-content",
+      }}
+      className="inline-tag-span flex items-center"
     >
+      {icon && <IconPickerItem icon={icon} size={14} color={fontColor} />}
       {equationValue}
     </span>
   );

@@ -6,7 +6,7 @@
  *
  */
 
-import "./KatexEquationAlterer.css";
+import "./KatexEquationAlterer.scss";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import * as React from "react";
@@ -16,6 +16,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Button from "../ui/Button";
 import KatexRenderer from "./KatexRenderer";
 import DropdownColorPicker from "./DropdownColorPicker";
+import { IconPicker } from "react-fa-icon-picker";
 
 type Props = {
   initialEquation?: string;
@@ -43,10 +44,11 @@ export default function KatexEquationAlterer({
 
   const [fontColor, setFontColor] = useState<string>("#344054");
   const [bgColor, setBgColor] = useState<string>("#F2F4F7");
+  const [icon, setIcon] = useState("");
 
   const onClick = useCallback(() => {
-    onConfirm(equation, inline, fontColor, bgColor);
-  }, [onConfirm, equation, inline, fontColor, bgColor]);
+    onConfirm(equation, inline, fontColor, bgColor, icon);
+  }, [onConfirm, equation, inline, fontColor, bgColor, icon]);
 
   const onCheckboxChange = useCallback(() => {
     setInline(!inline);
@@ -82,35 +84,41 @@ export default function KatexEquationAlterer({
         )}
       </div>
       {type === "tag" && (
-        <div
-          className="toolbar mt-3 flex justify-between"
-          style={{ height: "auto" }}
-        >
-          <div>
-            Font Color
-            <DropdownColorPicker
-              disabled={false}
-              buttonClassName="toolbar-item color-picker"
-              buttonAriaLabel="Formatting text color"
-              buttonIconClassName="icon font-color"
-              color={fontColor}
-              onChange={setFontColor}
-              title="text color"
-            />
+        <>
+          <div
+            className="toolbar mt-3 flex justify-between"
+            style={{ height: "auto", padding: 0 }}
+          >
+            <div>
+              Font Color
+              <DropdownColorPicker
+                disabled={false}
+                buttonClassName="toolbar-item color-picker"
+                buttonAriaLabel="Formatting text color"
+                buttonIconClassName="icon font-color"
+                color={fontColor}
+                onChange={setFontColor}
+                title="text color"
+              />
+            </div>
+            <div>
+              Background Color
+              <DropdownColorPicker
+                disabled={false}
+                buttonClassName="toolbar-item color-picker"
+                buttonAriaLabel="Formatting text color"
+                buttonIconClassName="icon bg-color"
+                color={bgColor}
+                onChange={setBgColor}
+                title="bg color"
+              />
+            </div>
           </div>
-          <div>
-            Background Color
-            <DropdownColorPicker
-              disabled={false}
-              buttonClassName="toolbar-item color-picker"
-              buttonAriaLabel="Formatting text color"
-              buttonIconClassName="icon bg-color"
-              color={bgColor}
-              onChange={setBgColor}
-              title="bg color"
-            />
+          <div className="icon-picker">
+            Icon
+            <IconPicker value={icon} onChange={(v) => setIcon(v)} />
           </div>
-        </div>
+        </>
       )}
       {showPreview && (
         <>
