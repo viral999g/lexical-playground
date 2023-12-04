@@ -51,6 +51,10 @@ import { InlineBlockNode } from "../plugins/InlineBlockPlugin/InlineBlockNode";
 import { InlineTitleNode } from "../plugins/InlineBlockPlugin/InlineTitleNode";
 import { InlineTagNode } from "../plugins/InlineTagPlugin/InlineTagNode";
 // import { InlineTagNode } from "../plugins/InlineTagPlugin/InlineTagNode";
+import { FlexColumnPluginNode } from '../plugins/FlexColumnPlugin/FlexColumnPluginNode';
+import { StatsCardNode } from './StatsCardNode';
+import { CompanyProfileDetailsNode } from './CompanyProfile/CompanyProfileDetailsNode';
+import { CompanyProfileTitleNode } from '../plugins/CompanyProfile/CompanyProfileTitle/CompanyProfileTitleNode';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -96,6 +100,11 @@ const PlaygroundNodes: Array<Klass<LexicalNode>> = [
   InlineBlockNode,
   InlineTitleNode,
   InlineTagNode,
+  StatsCardNode,
+	CompanyProfileDetailsNode,
+	FlexColumnPluginNode,
+	CompanyProfileTitleNode,
+
 ];
 
 export default PlaygroundNodes;

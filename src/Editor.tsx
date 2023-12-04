@@ -99,6 +99,7 @@ import initialState2 from "./utils/initialStates/initialState2.json";
 import { useMemo } from "react";
 import InlineBlockPlugin from "./plugins/InlineBlockPlugin";
 import InlineTagPlugin from "./plugins/InlineTagPlugin";
+import FlexColumnPlugin from "./plugins/FlexColumnPlugin/FlexColumnPlugin";
 
 const skipCollaborationInit =
   // @ts-ignore
@@ -249,6 +250,7 @@ export default function Editor(): JSX.Element {
         <CommentPlugin
           providerFactory={isCollab ? createWebsocketProvider : undefined}
         />
+        <FlexColumnPlugin />
         {isRichText ? (
           <>
             {isCollab ? (
