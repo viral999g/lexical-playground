@@ -5,106 +5,109 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
-import "katex/dist/katex.css";
-
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $wrapNodeInElement } from "@lexical/utils";
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $wrapNodeInElement } from '@lexical/utils';
+import 'katex/dist/katex.css';
 import {
-  $createParagraphNode,
-  $insertNodes,
-  $isRootOrShadowRoot,
-  COMMAND_PRIORITY_EDITOR,
-  createCommand,
-  LexicalCommand,
-  LexicalEditor,
-} from "lexical";
-import { useCallback, useEffect } from "react";
-import * as React from "react";
+	$createParagraphNode,
+	$createTextNode,
+	$insertNodes,
+	$isRootOrShadowRoot,
+	COMMAND_PRIORITY_EDITOR,
+	LexicalCommand,
+	LexicalEditor,
+	createCommand,
+} from 'lexical';
+import { useCallback, useEffect } from 'react';
+import * as React from 'react';
 
-import { $createEquationNode, EquationNode } from "../../nodes/EquationNode";
-import KatexEquationAlterer from "../../ui/KatexEquationAlterer";
-import { $createInlineTagNode } from "./InlineTagNode";
+import { $createEquationNode, EquationNode } from '../../nodes/EquationNode';
+import KatexEquationAlterer from '../../ui/KatexEquationAlterer';
+import { $createInlineTagNode } from './InlineTagNode';
 
 type CommandPayload = {
-  equation: string;
-  inline: boolean;
-  bullet?: boolean;
-  fontColor?: string;
-  bgColor?: string;
-  icon?: string;
+	equation: string;
+	inline: boolean;
+	bullet?: boolean;
+	fontColor?: string;
+	bgColor?: string;
+	icon?: string;
 };
 
 export const INSERT_INLINE_TAG_COMMAND: LexicalCommand<CommandPayload> =
-  createCommand("INSERT_INLINE_TAG_COMMAND");
+	createCommand('INSERT_INLINE_TAG_COMMAND');
 
 export function InsertTagDialog({
-  activeEditor,
-  onClose,
-  bullet,
+	activeEditor,
+	onClose,
+	bullet,
 }: {
-  activeEditor: LexicalEditor;
-  onClose: () => void;
-  bullet?: boolean;
+	activeEditor: LexicalEditor;
+	onClose: () => void;
+	bullet?: boolean;
 }): JSX.Element {
-  const onEquationConfirm = useCallback(
-    (
-      equation: string,
-      inline: boolean,
-      fontColor?: string,
-      bgColor?: string,
-      icon?: string
-    ) => {
-      activeEditor.dispatchCommand(INSERT_INLINE_TAG_COMMAND, {
-        equation,
-        inline,
-        bullet,
-        fontColor,
-        bgColor,
-        icon,
-      });
-      onClose();
-    },
-    [activeEditor, onClose]
-  );
+	const onEquationConfirm = useCallback(
+		(
+			equation: string,
+			inline: boolean,
+			fontColor?: string,
+			bgColor?: string,
+			icon?: string
+		) => {
+			activeEditor.dispatchCommand(INSERT_INLINE_TAG_COMMAND, {
+				equation,
+				inline,
+				bullet,
+				fontColor,
+				bgColor,
+				icon,
+			});
+			onClose();
+		},
+		[activeEditor, onClose]
+	);
 
-  return (
-    <KatexEquationAlterer
-      inputLabel={bullet ? "Text" : "Tag value"}
-      onConfirm={onEquationConfirm}
-      showPreview={false}
-      type={bullet ? "bullet" : "tag"}
-    />
-  );
+	return (
+		<KatexEquationAlterer
+			inputLabel={bullet ? 'Text' : 'Tag value'}
+			onConfirm={onEquationConfirm}
+			showPreview={false}
+			type={bullet ? 'bullet' : 'tag'}
+		/>
+	);
 }
 
 export default function InlineTagPlugin(): JSX.Element | null {
-  const [editor] = useLexicalComposerContext();
+	const [editor] = useLexicalComposerContext();
 
-  useEffect(() => {
-    return editor.registerCommand<CommandPayload>(
-      INSERT_INLINE_TAG_COMMAND,
-      (payload) => {
-        const { equation, inline, bullet, fontColor, bgColor, icon } = payload;
-        const equationNode = $createInlineTagNode(
-          equation,
-          inline,
-          bullet,
-          fontColor,
-          bgColor,
-          icon
-        );
+	useEffect(() => {
+		return editor.registerCommand<CommandPayload>(
+			INSERT_INLINE_TAG_COMMAND,
+			(payload) => {
+				const { equation, inline, bullet, fontColor, bgColor, icon } =
+					payload;
+				const equationNode = $createInlineTagNode(
+					equation,
+					inline,
+					bullet,
+					fontColor,
+					bgColor,
+					icon
+				);
 
-        $insertNodes([equationNode]);
-        if ($isRootOrShadowRoot(equationNode.getParentOrThrow())) {
-          $wrapNodeInElement(equationNode, $createParagraphNode).selectEnd();
-        }
+				$insertNodes([equationNode]);
+				if ($isRootOrShadowRoot(equationNode.getParentOrThrow())) {
+					$wrapNodeInElement(
+						equationNode,
+						$createParagraphNode
+					).selectEnd();
+				}
 
-        return true;
-      },
-      COMMAND_PRIORITY_EDITOR
-    );
-  }, [editor]);
+				return true;
+			},
+			COMMAND_PRIORITY_EDITOR
+		);
+	}, [editor]);
 
-  return null;
+	return null;
 }

@@ -25,6 +25,8 @@ import useLexicalEditable from "@lexical/react/useLexicalEditable";
 import * as React from "react";
 import { useEffect, useState } from "react";
 // import {CAN_USE_DOM} from 'shared/canUseDOM';
+import StatsCardsPlugin from './plugins/StatsCardsPlugin';
+import MainHeaderPlugin, { MainHeaderNode } from './plugins/MainHeader';
 
 import { createWebsocketProvider } from "./collaboration";
 import { useSettings } from "./context/SettingsContext";
@@ -100,6 +102,7 @@ import { useMemo } from "react";
 import InlineBlockPlugin from "./plugins/InlineBlockPlugin";
 import InlineTagPlugin from "./plugins/InlineTagPlugin";
 import FlexColumnPlugin from "./plugins/FlexColumnPlugin/FlexColumnPlugin";
+import CompanyProfileDetailsPlugin from './plugins/CompanyProfile/CompanyProfileDetailsPlugin';
 
 const skipCollaborationInit =
   // @ts-ignore
@@ -251,6 +254,7 @@ export default function Editor(): JSX.Element {
           providerFactory={isCollab ? createWebsocketProvider : undefined}
         />
         <FlexColumnPlugin />
+				<CompanyProfileDetailsPlugin />
         {isRichText ? (
           <>
             {isCollab ? (
@@ -320,7 +324,9 @@ export default function Editor(): JSX.Element {
             <TabIndentationPlugin />
             <CollapsiblePlugin />
             <PageBreakPlugin />
+            <MainHeaderPlugin />
             <LayoutPlugin />
+            <StatsCardsPlugin />
 
             {floatingAnchorElem && !isSmallWidthViewport && (
               <>
