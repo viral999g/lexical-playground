@@ -1,10 +1,15 @@
 .inline-block-container {
-  .inline_title {
-    display: flex;
-    align-items: center;
-  }
-  p {
-    display: flex;
-    align-items: center;
-  }
+	margin: 16px 0px;
+	.inline_title {
+		display: flex;
+		align-items: center;
+	}
+	p {
+		display: flex;
+		align-items: center;
+	}
+
+	.PlaygroundEditorTheme__textBold {
+		font-weight: 500 !important;
+	}
 }
