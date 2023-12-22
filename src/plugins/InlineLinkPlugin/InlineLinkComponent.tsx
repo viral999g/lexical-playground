@@ -19,9 +19,9 @@ import {
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { PdfViewerDrawer } from '../../components/PdfViewer/PdfViewerDrawer';
+// import { PdfViewerDrawer } from '../../components/PdfViewer/PdfViewerDrawer';
 import { $isInlineLinkNode } from './InlineLinkNode';
-import LinkIcon from './LinkIcon.svg';
+// import LinkIcon from './LinkIcon.svg';
 
 // import EquationEditor from '../ui/EquationEditor';
 // import KatexRenderer from '../ui/KatexRenderer';
@@ -125,16 +125,16 @@ export default function EquationComponent({
 		<>
 			<div onClick={handleClick} className="inline cursor-pointer">
 				{/* {icon && <IconPickerItem icon={icon} size={14} color={fontColor} />} */}
-				<img src={LinkIcon} className="inline w-4 h-4"></img>
+				{/* <img src={LinkIcon} className="inline w-4 h-4"></img> */}
 			</div>
 
-			{mimetype === 'pdf' && (
+			{/* {mimetype === 'pdf' && (
 				<PdfViewerDrawer
 					setIsOpen={setIsOpen}
 					isOpen={isOpen}
 					fileUrl={equationValue}
 				/>
-			)}
+			)} */}
 		</>
 	);
 }
