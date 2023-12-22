@@ -13,7 +13,19 @@
 
 
 
-
+.add-comp-menu {
+	padding: 0px !important;
+	background-color: #fff !important;
+}
+.custom-sortable-header {
+	display: flex;
+	align-items: center;
+	.custom-table-sorting-icon {
+		display: inline-flex;
+		margin-right: 4px;
+		cursor: pointer;
+	}
+}
 .stats-card-group-wrapper {
 	.stats-card {
 		background-repeat: no-repeat;
@@ -26,21 +38,19 @@
 		}
 
 		p:nth-child(1) {
-			span { 
+			span {
 				font-size: 14px;
 				font-weight: 400;
 			}
 		}
 		p:nth-child(2) {
-			span { 
+			span {
 				font-size: 24px;
 				font-weight: 600;
 			}
 		}
 	}
 }
-
-
 
 .company-profile-card-group-wrapper {
 	.details-card {
@@ -53,7 +63,7 @@
 			max-height: 130px !important;
 		}
 
-		.inline-block-container { 
+		.inline-block-container {
 			margin: 4px 0px;
 
 			.editor-image {
@@ -61,8 +71,8 @@
 			}
 		}
 
-		.inline_title { 
-			span { 
+		.inline_title {
+			span {
 				color: #667085;
 				font-size: 16px;
 			}

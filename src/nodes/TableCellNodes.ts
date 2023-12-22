@@ -23,22 +23,22 @@ import {KeywordNode} from './KeywordNode';
 import {MentionNode} from './MentionNode';
 
 const PlaygroundNodes: Array<Klass<LexicalNode>> = [
-  HeadingNode,
-  ListNode,
-  ListItemNode,
-  QuoteNode,
-  CodeNode,
-  HashtagNode,
-  CodeHighlightNode,
-  AutoLinkNode,
-  LinkNode,
-  ImageNode,
-  MentionNode,
-  EmojiNode,
-  ExcalidrawNode,
-  EquationNode,
-  AutocompleteNode,
-  KeywordNode,
+	HeadingNode,
+	ListNode,
+	ListItemNode,
+	QuoteNode,
+	CodeNode,
+	HashtagNode,
+	CodeHighlightNode,
+	AutoLinkNode,
+	LinkNode,
+	ImageNode,
+	MentionNode,
+	EmojiNode,
+	ExcalidrawNode,
+	EquationNode,
+	AutocompleteNode,
+	KeywordNode,
 ];
 
 export default PlaygroundNodes;

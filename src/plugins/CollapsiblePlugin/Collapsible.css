@@ -8,7 +8,7 @@
  */
 
 .Collapsible__container {
-  background: #fcfcfc;
+  /* background: #fcfcfc; */
   border: 1px solid #eee;
   border-radius: 10px;
   margin-bottom: 8px;
@@ -16,7 +16,8 @@
 
 .Collapsible__title {
   cursor: pointer;
-  padding: 5px 5px 5px 20px;
+  padding: 5px 5px 5px 16px;
+  /* padding: 5px 5px 5px 20px; */
   position: relative;
   font-weight: bold;
   list-style: none;
@@ -36,7 +37,7 @@
   display: block;
   content: '';
   position: absolute;
-  left: 7px;
+  left: 0px;
   top: 50%;
   transform: translateY(-50%);
 }

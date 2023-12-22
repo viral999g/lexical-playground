@@ -7,6 +7,7 @@
  */
 
 import {
+  $applyNodeReplacement,
   $createParagraphNode,
   $isElementNode,
   DOMConversionMap,
@@ -122,7 +123,7 @@ export class CollapsibleTitleNode extends ElementNode {
 }
 
 export function $createCollapsibleTitleNode(): CollapsibleTitleNode {
-  return new CollapsibleTitleNode();
+  return $applyNodeReplacement(new CollapsibleTitleNode());
 }
 
 export function $isCollapsibleTitleNode(

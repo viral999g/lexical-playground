@@ -18,49 +18,39 @@ import {
 } from 'lexical';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { IconPickerItem } from 'react-fa-icon-picker';
 
-import EquationEditor from '../../ui/EquationEditor';
-import KatexRenderer from '../../ui/KatexRenderer';
-import DotIcon from './DotIcon.svg';
-import { $isInlineTagNode } from './InlineTagNode';
+import { PdfViewerDrawer } from '../../components/PdfViewer/PdfViewerDrawer';
+import { $isInlineLinkNode } from './InlineLinkNode';
+import LinkIcon from './LinkIcon.svg';
 
 // import EquationEditor from '../ui/EquationEditor';
 // import KatexRenderer from '../ui/KatexRenderer';
-// import {$isInlineTagNode} from './EquationNode';
+// import {$isInlineLinkNode} from './EquationNode';
 
 type EquationComponentProps = {
 	equation: string;
-	inline: boolean;
 	nodeKey: NodeKey;
-	bullet?: boolean;
-	fontColor?: string;
-	bgColor?: string;
-	icon?: string;
+	mimetype: string;
 };
 
 export default function EquationComponent({
 	equation,
-	inline,
 	nodeKey,
-	bullet,
-	fontColor,
-	bgColor,
-	icon,
+	mimetype,
 }: EquationComponentProps): JSX.Element {
 	const [editor] = useLexicalComposerContext();
 	const [equationValue, setEquationValue] = useState(equation);
 	const [showEquationEditor, setShowEquationEditor] =
 		useState<boolean>(false);
 	const inputRef = useRef(null);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const onHide = useCallback(
 		(restoreSelection?: boolean) => {
 			setShowEquationEditor(false);
 			editor.update(() => {
 				const node = $getNodeByKey(nodeKey);
-				if ($isInlineTagNode(node)) {
+				if ($isInlineLinkNode(node)) {
 					node.setEquation(equationValue);
 					if (restoreSelection) {
 						node.selectNext(0, 0);
@@ -123,28 +113,28 @@ export default function EquationComponent({
 		}
 	}, [editor, nodeKey, onHide, showEquationEditor]);
 
-	if (bullet) {
-		return (
-			<span className="inline-tag-bullet">
-				<span className="dot-icon-container">
-					<img src={DotIcon}></img>
-				</span>
-				<span className="eqValue">{equationValue}</span>
-			</span>
-		);
-	}
+	const handleClick = () => {
+		if (mimetype === 'pdf') {
+			setIsOpen(true);
+		} else {
+			window.open(equationValue, '_blank');
+		}
+	};
 
 	return (
-		<div
-			style={{
-				color: fontColor,
-				backgroundColor: bgColor,
-				width: 'fit-content',
-			}}
-			className="inline-tag-span flex items-center"
-		>
-			{/* {icon && <IconPickerItem icon={icon} size={14} color={fontColor} />} */}
-			{equationValue}
-		</div>
+		<>
+			<div onClick={handleClick} className="inline cursor-pointer">
+				{/* {icon && <IconPickerItem icon={icon} size={14} color={fontColor} />} */}
+				<img src={LinkIcon} className="inline w-4 h-4"></img>
+			</div>
+
+			{mimetype === 'pdf' && (
+				<PdfViewerDrawer
+					setIsOpen={setIsOpen}
+					isOpen={isOpen}
+					fileUrl={equationValue}
+				/>
+			)}
+		</>
 	);
 }

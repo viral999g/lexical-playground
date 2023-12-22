@@ -18,37 +18,22 @@ import {
 } from 'lexical';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { IconPickerItem } from 'react-fa-icon-picker';
 
-import EquationEditor from '../../ui/EquationEditor';
-import KatexRenderer from '../../ui/KatexRenderer';
-import DotIcon from './DotIcon.svg';
-import { $isInlineTagNode } from './InlineTagNode';
+import { $isIFrameNode } from './IFrameNode';
 
-// import EquationEditor from '../ui/EquationEditor';
-// import KatexRenderer from '../ui/KatexRenderer';
-// import {$isInlineTagNode} from './EquationNode';
-
-type EquationComponentProps = {
-	equation: string;
-	inline: boolean;
+type IFrameComponentProps = {
+	src: string;
 	nodeKey: NodeKey;
-	bullet?: boolean;
-	fontColor?: string;
-	bgColor?: string;
-	icon?: string;
+	height?: string;
+	width?: string;
 };
 
-export default function EquationComponent({
-	equation,
-	inline,
+export default function IFrameComponent({
+	src: equation,
 	nodeKey,
-	bullet,
-	fontColor,
-	bgColor,
-	icon,
-}: EquationComponentProps): JSX.Element {
+	height = '',
+	width = '',
+}: IFrameComponentProps): JSX.Element {
 	const [editor] = useLexicalComposerContext();
 	const [equationValue, setEquationValue] = useState(equation);
 	const [showEquationEditor, setShowEquationEditor] =
@@ -60,7 +45,7 @@ export default function EquationComponent({
 			setShowEquationEditor(false);
 			editor.update(() => {
 				const node = $getNodeByKey(nodeKey);
-				if ($isInlineTagNode(node)) {
+				if ($isIFrameNode(node)) {
 					node.setEquation(equationValue);
 					if (restoreSelection) {
 						node.selectNext(0, 0);
@@ -123,28 +108,14 @@ export default function EquationComponent({
 		}
 	}, [editor, nodeKey, onHide, showEquationEditor]);
 
-	if (bullet) {
-		return (
-			<span className="inline-tag-bullet">
-				<span className="dot-icon-container">
-					<img src={DotIcon}></img>
-				</span>
-				<span className="eqValue">{equationValue}</span>
-			</span>
-		);
-	}
-
 	return (
-		<div
-			style={{
-				color: fontColor,
-				backgroundColor: bgColor,
-				width: 'fit-content',
-			}}
-			className="inline-tag-span flex items-center"
-		>
-			{/* {icon && <IconPickerItem icon={icon} size={14} color={fontColor} />} */}
-			{equationValue}
+		<div className="w-full">
+			<iframe
+				src={equationValue}
+				height={height}
+				width={width}
+				className="w-full"
+			/>
 		</div>
 	);
 }

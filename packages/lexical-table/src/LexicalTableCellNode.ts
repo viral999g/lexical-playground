@@ -18,7 +18,7 @@ import type {
   Spread,
 } from 'lexical';
 
-import {addClassNamesToElement} from '@lexical/utils';
+import { addClassNamesToElement } from '@lexical/utils';
 import {
   $applyNodeReplacement,
   $createParagraphNode,
@@ -27,7 +27,8 @@ import {
   DEPRECATED_GridCellNode,
 } from 'lexical';
 
-import {PIXEL_VALUE_REG_EXP} from './constants';
+import { PIXEL_VALUE_REG_EXP } from './constants';
+import { $sortTableColumn } from './LexicalTableUtils';
 
 export const TableCellHeaderStates = {
   BOTH: 3,
@@ -44,6 +45,8 @@ export type SerializedTableCellNode = Spread<
     headerState: TableCellHeaderState;
     width?: number;
     backgroundColor?: null | string;
+    sortable: boolean;
+    sortDirection: 'ascending' | 'descending';
   },
   SerializedGridCellNode
 >;
@@ -56,6 +59,8 @@ export class TableCellNode extends DEPRECATED_GridCellNode {
   __width?: number;
   /** @internal */
   __backgroundColor: null | string;
+  __sortable: boolean = false;
+  __sortDirection: 'ascending' | 'descending';
 
   static getType(): string {
     return 'tablecell';
@@ -95,6 +100,10 @@ export class TableCellNode extends DEPRECATED_GridCellNode {
       serializedNode.width || undefined,
     );
     cellNode.__rowSpan = rowSpan;
+    cellNode.__sortable = serializedNode.sortable;
+    if (serializedNode.sortDirection) {
+      cellNode.__sortDirection = serializedNode.sortDirection;
+    }
     cellNode.__backgroundColor = serializedNode.backgroundColor || null;
     return cellNode;
   }
@@ -111,7 +120,7 @@ export class TableCellNode extends DEPRECATED_GridCellNode {
     this.__backgroundColor = null;
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(config: EditorConfig, editor): HTMLElement {
     const element = document.createElement(
       this.getTag(),
     ) as HTMLTableCellElement;
@@ -128,18 +137,42 @@ export class TableCellNode extends DEPRECATED_GridCellNode {
     if (this.__backgroundColor !== null) {
       element.style.backgroundColor = this.__backgroundColor;
     }
+    if (this.__headerState === TableCellHeaderStates.ROW && this.__sortable) {
+      const toggleEle = document.createElement('div')
+      const tempContainer = document.createElement('div');
 
+      const svgString = `
+        <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 5L5 1L1 5L9 5Z" fill="${this.__sortDirection === 'ascending' ? '#000' : '#B1B5C4'}" stroke="#B1B5C3" stroke-width="0.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1 7L5 11L9 7H1Z" fill="${this.__sortDirection === 'descending' ? '#000' : '#B1B5C4'}"  stroke="#B1B5C3" stroke-width="0.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `;
+      tempContainer.innerHTML = svgString;
+
+      const svgElement = tempContainer.firstChild as ChildNode;
+      toggleEle.appendChild(svgElement as ChildNode);
+      tempContainer.classList.add('custom-table-sorting-icon')
+      tempContainer.addEventListener('click', (e) => {
+        editor.update(() => {
+          const newDir = this.__sortDirection === 'ascending' ? 'descending' : 'ascending'
+          this.setSortDirection(newDir)
+          $sortTableColumn(editor, this, newDir)
+        })
+      });
+      element.append(tempContainer);
+    }
     addClassNamesToElement(
       element,
       config.theme.tableCell,
       this.hasHeader() && config.theme.tableCellHeader,
+      this.__sortable && 'custom-sortable-header'
     );
 
     return element;
   }
 
   exportDOM(editor: LexicalEditor): DOMExportOutput {
-    const {element} = super.exportDOM(editor);
+    const { element } = super.exportDOM(editor);
 
     if (element) {
       const element_ = element as HTMLTableCellElement;
@@ -152,9 +185,8 @@ export class TableCellNode extends DEPRECATED_GridCellNode {
       if (this.__rowSpan > 1) {
         element_.rowSpan = this.__rowSpan;
       }
-      element_.style.width = `${
-        this.getWidth() || Math.max(90, maxWidth / colCount)
-      }px`;
+      element_.style.width = `${this.getWidth() || Math.max(90, maxWidth / colCount)
+        }px`;
 
       element_.style.verticalAlign = 'top';
       element_.style.textAlign = 'start';
@@ -179,11 +211,20 @@ export class TableCellNode extends DEPRECATED_GridCellNode {
       headerState: this.__headerState,
       type: 'tablecell',
       width: this.getWidth(),
+      sortable: this.__sortable,
+      sortDirection: this.__sortDirection,
     };
   }
 
   getTag(): string {
     return this.hasHeader() ? 'th' : 'td';
+  }
+
+  setSortDirection(direction: 'ascending' | 'descending'): 'ascending' | 'descending' {
+    const self = this.getWritable();
+    self.__sortDirection = direction;
+    self.__sortable = true;
+    return this.__sortDirection;
   }
 
   setHeaderStyles(headerState: TableCellHeaderState): TableCellHeaderState {
@@ -240,7 +281,9 @@ export class TableCellNode extends DEPRECATED_GridCellNode {
       prevNode.__width !== this.__width ||
       prevNode.__colSpan !== this.__colSpan ||
       prevNode.__rowSpan !== this.__rowSpan ||
-      prevNode.__backgroundColor !== this.__backgroundColor
+      prevNode.__backgroundColor !== this.__backgroundColor ||
+      prevNode.__sortDirection !== this.__sortDirection ||
+      prevNode.__sortable !== this.__sortable
     );
   }
 

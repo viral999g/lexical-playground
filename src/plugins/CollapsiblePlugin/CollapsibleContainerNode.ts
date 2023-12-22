@@ -7,6 +7,7 @@
  */
 
 import {
+  $applyNodeReplacement,
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
@@ -126,7 +127,7 @@ export class CollapsibleContainerNode extends ElementNode {
 export function $createCollapsibleContainerNode(
   isOpen: boolean,
 ): CollapsibleContainerNode {
-  return new CollapsibleContainerNode(isOpen);
+  return $applyNodeReplacement(new CollapsibleContainerNode(isOpen));
 }
 
 export function $isCollapsibleContainerNode(
