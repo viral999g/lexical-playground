@@ -162,6 +162,7 @@ export {
   isHTMLElement,
   isSelectionCapturedInDecoratorInput,
   isSelectionWithinEditor,
+  $getChildrenRecursively,
 } from './LexicalUtils';
 export {$isDecoratorNode, DecoratorNode} from './nodes/LexicalDecoratorNode';
 export {$isElementNode, ElementNode} from './nodes/LexicalElementNode';

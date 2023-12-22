@@ -538,14 +538,14 @@ export function $getSelectionStyleValueForProperty(
   const endOffset = isBackward ? focus.offset : anchor.offset;
   const endNode = isBackward ? focus.getNode() : anchor.getNode();
 
-  if (selection.style !== '') {
-    const css = selection.style;
-    const styleObject = getStyleObjectFromCSS(css);
+  // if (selection.style !== '') {
+  //   const css = selection.style;
+  //   const styleObject = getStyleObjectFromCSS(css);
 
-    if (styleObject !== null && styleProperty in styleObject) {
-      return styleObject[styleProperty];
-    }
-  }
+  //   if (styleObject !== null && styleProperty in styleObject) {
+  //     return styleObject[styleProperty];
+  //   }
+  // }
 
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
